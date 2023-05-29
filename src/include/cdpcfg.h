@@ -378,7 +378,7 @@
 #define CDPCFG_AP_IP1 192
 #define CDPCFG_AP_IP2 168
 #define CDPCFG_AP_IP3 1
-#define CDPCFG_AP_IP4 1
+#define CDPCFG_AP_IP4 69
 
 /** @brief Asyncwebserver Port */
 #define CDPCFG_WEB_PORT 80
