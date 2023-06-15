@@ -97,7 +97,7 @@ enum topics {
   // Send duck commands
   dcmd = 0x16,
   // MQ7 Gas Sensor
-  mq7 = 0xEF,
+  rssi = 0xEF,
   // GP2Y Dust Sensor
   gp2y = 0xFA,
   // bmp280

@@ -151,6 +151,7 @@ public:
    *
    */
   int setupOTA();
+  int getRSSI();
 
   /**
    * @brief Sends data into the mesh network.

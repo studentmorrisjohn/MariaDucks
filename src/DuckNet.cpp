@@ -505,6 +505,92 @@ int DuckNet::setupWebServer(bool createCaptivePortal, String html) {
     }
   });
 
+  webServer.on("/submitFormLora", HTTP_POST, [&](AsyncWebServerRequest* request) {
+    loginfo("Submitting Form to /formSubmit.json");
+
+    int err = DUCK_ERR_NONE;
+
+    int paramsNumber = request->params();
+
+    String val = "";
+    String clientId = "MORR";
+    String name = "MORR";
+    String phoneNumber = "MORR";
+    String emergency = "MORR";
+    String needs = "MORR";
+    String dangers = "MORR";
+    String numberOfPeople = "MORR";
+    String isImmobile = "MORR";
+    String message = "MORR";
+
+    
+    for (int i = 0; i < paramsNumber; i++) {
+      AsyncWebParameter* p = request->getParam(i);
+      logdbg(p->name() + ": " + p->value());
+
+      if (p->name() == "clientId") {
+        clientId = p->value();
+      } 
+
+      if (p->name() == "name") {
+        name = p->value();
+      } 
+
+      if (p->name() == "phoneNumber") {
+        phoneNumber = p->value();
+      } 
+
+      if (p->name() == "emergency") {
+        emergency = p->value();
+      } 
+
+      if (p->name() == "needs") {
+        needs = p->value();
+      } 
+
+      if (p->name() == "dangers") {
+        dangers = p->value();
+      } 
+
+      if (p->name() == "numberOfPeople") {
+        numberOfPeople = p->value();
+      } 
+
+      if (p->name() == "isImmobile") {
+        isImmobile = p->value();
+      } 
+
+      if (p->name() == "message") {
+        message = p->value();
+      } 
+
+    }
+
+    clientId.toUpperCase();
+    val = "[" + clientId + "]" + "*" + name + "*" + phoneNumber + "*" + emergency + "*" + needs + "*" + dangers + "*" + numberOfPeople + "*" + isImmobile + "*" + message;
+    std::vector<byte> muid;
+    err = duck->sendData(topics::rssi, val, ZERO_DUID, &muid);
+
+    switch (err) {
+      case DUCK_ERR_NONE:
+      {
+        String response = "{\"muid\":\"" + duckutils::toString(muid) + "\"}";
+        request->send(200, "text/html", response);
+        logdbg("Sent 200 response: " + response);
+      }
+      break;
+      case DUCKLORA_ERR_MSG_TOO_LARGE:
+      request->send(413, "text/html", "Message payload too big!");
+      break;
+      case DUCKLORA_ERR_HANDLE_PACKET:
+      request->send(400, "text/html", "BadRequest");
+      break;
+      default:
+      request->send(500, "text/html", "Oops! Unknown error.");
+      break;
+    }
+  });
+
   webServer.begin();
 
   return DUCK_ERR_NONE;

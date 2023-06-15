@@ -512,3 +512,7 @@ String Duck::getErrorString(int error) {
   
   return "Unknown error";
 }
+
+int Duck::getRSSI() {
+  return duckRadio.getRSSI();
+}
