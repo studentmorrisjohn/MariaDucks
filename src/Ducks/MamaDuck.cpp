@@ -58,6 +58,13 @@ void MamaDuck::run() {
   if (DuckRadio::getReceiveFlag()) {
     handleReceivedPacket();
     rxPacket->reset();
+
+    // send a new data that contains a packet for the rssi
+    int rssi = getRSSI();
+    String rssi_string = String(rssi);
+
+    std::vector<byte> muid;
+    sendData(topics::rssi, rssi_string, ZERO_DUID, &muid);
   }
   processPortalRequest();
 }
