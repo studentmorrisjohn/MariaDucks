@@ -78,14 +78,14 @@ int DuckNet::setupWebServer(bool createCaptivePortal, String html) {
     logdbg("Web Server using custom main page");
     portal = html;
   }
-  webServer.onNotFound([&](AsyncWebServerRequest* request) {
-    logwarn("DuckNet - onNotFound: " + request->url());
-    request->send(200, "text/html", portal);
-  });
+  // webServer.onNotFound([&](AsyncWebServerRequest* request) {
+  //   logwarn("DuckNet - onNotFound: " + request->url());
+  //   request->send(200, "text/html", portal);
+  // });
 
-  webServer.on("/", HTTP_GET, [&](AsyncWebServerRequest* request) {
-    request->send(200, "text/html", portal);
-  });
+  // webServer.on("/", HTTP_GET, [&](AsyncWebServerRequest* request) {
+  //   request->send(200, "text/html", portal);
+  // });
 
   webServer.on("/main", HTTP_GET, [&](AsyncWebServerRequest* request) {
     request->send(200, "text/html", MAIN_page);
@@ -376,6 +376,7 @@ int DuckNet::setupWebServer(bool createCaptivePortal, String html) {
     String clientId = "MORR";
     String longitude = "";
     String latitude = "";
+    String isSafe = "";
 
     for (int i = 0; i < paramsNumber; i++) {
       AsyncWebParameter* p = request->getParam(i);
@@ -391,11 +392,15 @@ int DuckNet::setupWebServer(bool createCaptivePortal, String html) {
 
       if (p->name() == "latitude") {
         latitude = p->value();
-      } 
+      }
+
+      if (p->name() == "isSafe") {
+        isSafe = p->value();
+      }
     }
 
     clientId.toUpperCase();
-    val = "[" + clientId + "]" + "*" + latitude + "*" + longitude;
+    val = "[" + clientId + "]" + "*" + latitude + "*" + longitude + "*" + isSafe;
     std::vector<byte> muid;
     err = duck->sendData(topics::location, val, ZERO_DUID, &muid);
 
