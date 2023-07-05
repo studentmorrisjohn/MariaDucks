@@ -377,6 +377,7 @@ int DuckNet::setupWebServer(bool createCaptivePortal, String html) {
     String longitude = "";
     String latitude = "";
     String isSafe = "";
+    String currentDateTime = "";
 
     for (int i = 0; i < paramsNumber; i++) {
       AsyncWebParameter* p = request->getParam(i);
@@ -397,10 +398,16 @@ int DuckNet::setupWebServer(bool createCaptivePortal, String html) {
       if (p->name() == "isSafe") {
         isSafe = p->value();
       }
+
+      if (p->name() == "currentDateTime") {
+        currentDateTime = p->value();
+      }
+
+      
     }
 
     clientId.toUpperCase();
-    val = "[" + clientId + "]" + "*" + latitude + "*" + longitude + "*" + isSafe;
+    val = "[" + clientId + "]" + "*" + latitude + "*" + longitude + "*" + isSafe+ "*" + currentDateTime;
     std::vector<byte> muid;
     err = duck->sendData(topics::location, val, ZERO_DUID, &muid);
 

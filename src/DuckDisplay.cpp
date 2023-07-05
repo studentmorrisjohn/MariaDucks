@@ -220,8 +220,8 @@ void DuckDisplay::showDefaultScreen() {
 #else
   u8g2.clearBuffer();  
   // default display size 128x64
-  drawString(0,10, "Napaka Cute ni ");
-  drawString(0,20, "Ashley ");
+  drawString(0,10, "Project Maria ");
+  drawString(0,20, "Emergency Network ");
   setCursor(0, 40);
   print("DT: " + duckTypeToString(duckType));
   drawString(0,50,"v");
